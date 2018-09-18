@@ -230,7 +230,7 @@ Value listunspent(const Array& params, bool fHelp)
 
 Value createrawtransaction(const Array& params, bool fHelp)
 {
-    if (fHelp || (params.size() < 2 || params.size() > 3))
+    if (fHelp || params.size() != 2)
         throw runtime_error(
             "createrawtransaction [{\"txid\":txid,\"vout\":n},...] {address:amount,...} [tx-comment]\n"
             "Create a transaction spending given inputs\n"
