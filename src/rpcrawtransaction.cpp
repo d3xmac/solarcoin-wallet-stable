@@ -250,6 +250,8 @@ Value createrawtransaction(const Array& params, bool fHelp)
     if (params.size() == 3)
     {
         std::string txcomment = params[2].get_str();
+        if (txcomment.substr(0,5).compare("text:") != 0)
+            txcomment = "text:" + txcomment;
         if (txcomment.length() > MAX_TX_COMMENT_LEN_V2)
         {
             txcomment.resize(MAX_TX_COMMENT_LEN_V2);
