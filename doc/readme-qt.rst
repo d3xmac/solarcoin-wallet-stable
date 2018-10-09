@@ -1,4 +1,4 @@
-SolarCoin-Qt: Qt4 GUI for SolarCoin
+SolarCoin-Qt: Qt5 GUI for SolarCoin
 ===============================
 
 Build instructions
@@ -7,39 +7,24 @@ Build instructions
 Debian
 -------
 
-First, make sure that the required packages for Qt4 development of your
-distribution are installed, these are
+First, ensure the packages from build-unix.md are installed, then install the required Qt5 packages:
 
 ::
 
-for Debian and Ubuntu  <= 11.10 :
+    sudo apt-get install libqrencode-dev libqt5webkit5-dev qt5-qmake libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev-tools
+
+then execute the following to build (for example) without UPNP:
 
 ::
 
-    apt-get install qt4-qmake libqt4-dev build-essential libboost-dev libboost-system-dev \
-        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb4.8++-dev libminiupnpc-dev
-
-for Ubuntu >= 12.04 (please read the 'Berkely DB version warning' below):
-
-::
-
-    apt-get install qt4-qmake libqt4-dev build-essential libboost-dev libboost-system-dev \
-        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb++-dev libminiupnpc-dev
-
-For Qt 5 you need the following, otherwise you get an error with lrelease when running qmake:
-
-::
-
-    apt-get install qt5-qmake libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev-tools
-
-then execute the following:
-
-::
-
-    qmake
+    qmake -qt=qt5 "USE_UPNP=-"
     make
+
+if you hit an error due to missing Qt, you can install 
+
+::
+
+    sudo apt-get install qt5-default 
 
 Alternatively, install `Qt Creator`_ and open the `solarcoin-qt.pro` file.
 
