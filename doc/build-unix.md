@@ -93,7 +93,7 @@ Or to build yourself:
 
 Berkeley DB
 -----------
-You need Berkeley DB 4.8.  If you have to build Berkeley DB yourself:
+If you need Berkeley DB 4.8.  If you have to build Berkeley DB yourself:
 
 	../dist/configure --enable-cxx
 	make
