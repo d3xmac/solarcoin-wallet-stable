@@ -17,6 +17,7 @@ then execute the following to build (for example) without UPNP:
 
 ::
 
+    git checkout compile-revisions
     qmake -qt=qt5 "USE_UPNP=-"
     make
 
