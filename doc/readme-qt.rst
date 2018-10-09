@@ -7,7 +7,7 @@ Build instructions
 Debian
 -------
 
-First, ensure the packages from build-unix.md are installed, then install the required Qt5 packages:
+First, ensure the packages from (build-unix.md)[https://github.com/solarcoin/solarcoin-legacy/blob/compile-revisions/doc/build-unix.md] are installed, then install the required Qt5 packages:
 
 ::
 
