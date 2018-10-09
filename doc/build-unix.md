@@ -64,14 +64,14 @@ Optional:
 
 For Ubuntu only: db4.8 packages are available here. You can add the repository and install using the following commands:
 
-sudo apt-get install software-properties-common
-sudo add-apt-repository ppa:bitcoin/bitcoin
-sudo apt-get update
-sudo apt-get install libdb4.8-dev libdb4.8++-dev
+	sudo apt-get install software-properties-common
+	sudo add-apt-repository ppa:bitcoin/bitcoin
+	sudo apt-get update
+	sudo apt-get install libdb4.8-dev libdb4.8++-dev
 
 Otherwise the newer 5.3 package appears to work but may break backwards compatibility:
 
-sudo apt-get install libdb4.8-dev libdb5.3++-dev
+	sudo apt-get install libdb4.8-dev libdb5.3++-dev
 
 Notes
 -----
