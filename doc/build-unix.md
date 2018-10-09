@@ -11,20 +11,21 @@ UNIX BUILD NOTES
 To Build
 ---------------------
 
+	git checkout compile-revisions	
 	cd src/
-	make -f makefile.unix		# Headless solarcoin
+	make -f makefile.unix USE_UPNP=- -e PIE=1 # Headless solarcoin without UPNP, with PIE (see security)
 
 See readme-qt.rst for instructions on building SolarCoin-Qt, the graphical user interface.
 
 Dependencies
 ---------------------
 
- Library     Purpose           Description
- -------     -------           -----------
- libssl      SSL Support       Secure communications
- libdb4.8    Berkeley DB       Blockchain & wallet storage
- libboost    Boost             C++ Library
- miniupnpc   UPnP Support      Optional firewall-jumping support
+ Library	Purpose           Description
+ -------	-------           -----------
+ libssl1.0-dev	SSL Support       Secure communications (note needs older version 1.0)
+ libdb4.8    	Berkeley DB       Blockchain & wallet storage
+ libboost    	Boost             C++ Library
+ miniupnpc   	UPnP Support      Optional firewall-jumping support
 
 [miniupnpc](http://miniupnp.free.fr/) may be used for UPnP port mapping.  It can be downloaded from [here](
 http://miniupnp.tuxfamily.org/files/).  UPnP support is compiled in and
@@ -48,45 +49,41 @@ Licenses of statically linked libraries:
 -  GCC           4.3.3
 -  OpenSSL       1.0.1c
 -  Berkeley DB   4.8.30.NC
--  Boost         1.37
+-  Boost         1.65
 -  miniupnpc     1.6
 
 Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
 Build requirements:
 
-	sudo apt-get install build-essential
-	sudo apt-get install libssl-dev
-
-for Ubuntu 12.04:
-
-	sudo apt-get install libboost-all-dev
-
- db4.8 packages are available [here](https://launchpad.net/~bitcoin/+archive/bitcoin).
-
- Ubuntu precise has packages for libdb5.1-dev and libdb5.1++-dev,
- but using these will break binary wallet compatibility, and is not recommended.
-
-for other Ubuntu & Debian:
-
-	sudo apt-get install libdb4.8-dev
-	sudo apt-get install libdb4.8++-dev
-	sudo apt-get install libboost1.37-dev
- (If using Boost 1.37, append -mt to the boost libraries in the makefile)
+	sudo apt-get install build-essential libssl1.0-dev libzip-dev libboost-all-dev
 
 Optional:
 
 	sudo apt-get install libminiupnpc-dev (see USE_UPNP compile flag)
 
+For Ubuntu only: db4.8 packages are available here. You can add the repository and install using the following commands:
+
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:bitcoin/bitcoin
+sudo apt-get update
+sudo apt-get install libdb4.8-dev libdb4.8++-dev
+
+Otherwise the newer 5.3 package appears to work but may break backwards compatibility:
+
+sudo apt-get install libdb4.8-dev libdb5.3++-dev
 
 Notes
 -----
-The release is built with GCC and then "strip bitcoind" to strip the debug
+The release is built with GCC and then "strip solarcoind" to strip the debug
 symbols, which reduces the executable size by about 90%.
 
 
 miniupnpc
 ---------
+	sudo apt-get install miniupnpc-dev
+
+Or to build yourself:
 	tar -xzvf miniupnpc-1.6.tar.gz
 	cd miniupnpc-1.6
 	make
