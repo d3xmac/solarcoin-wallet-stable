@@ -71,7 +71,7 @@ For Ubuntu only: db4.8 packages are available here. You can add the repository a
 
 Otherwise the newer 5.3 package appears to work but may break backwards compatibility:
 
-	sudo apt-get install libdb4.8-dev libdb5.3++-dev
+	sudo apt-get install libdb5.3-dev libdb5.3++-dev
 
 Notes
 -----
