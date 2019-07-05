@@ -1471,7 +1471,7 @@ void BitcoinGUI::updateStakingIcon()
     u_int64_t nEstimateTime = nTargetSpacing * nNetworkWeight / nWeight;
 
     if (fDebug)
-        printf("updateStakingIcon(): nLastCoinStakeSearchInterval=%"PRId64" nTargetSpacing=%u nNetworkWeight=%.5g nWeight=%"PRIu64" nEstimateTime=%"PRIu64"\n",
+        printf("updateStakingIcon(): nLastCoinStakeSearchInterval=%" PRId64 " nTargetSpacing=%u nNetworkWeight=%.5g nWeight=%" PRIu64 " nEstimateTime=%" PRIu64 "\n",
                nLastCoinStakeSearchInterval, nTargetSpacing, nNetworkWeight, nWeight, nEstimateTime);
 
     if (walletModel->getEncryptionStatus() == WalletModel::Unlocked && nLastCoinStakeSearchInterval && nWeight)
