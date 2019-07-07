@@ -22,7 +22,7 @@ Dependencies
 
  Library	Purpose           Description
  -------	-------           -----------
- libssl1.0-dev	SSL Support       Secure communications (note needs older version 1.0)
+ libssl-dev	SSL Support       Secure communications
  libdb4.8    	Berkeley DB       Blockchain & wallet storage
  libboost    	Boost             C++ Library
  miniupnpc   	UPnP Support      Optional firewall-jumping support
@@ -47,16 +47,16 @@ Licenses of statically linked libraries:
 
 - Versions used in this release:
 -  GCC           4.3.3
--  OpenSSL       1.0.1c
+-  OpenSSL       1.1
 -  Berkeley DB   4.8.30.NC
--  Boost         1.65
--  miniupnpc     1.6
+-  Boost         1.67
+-  miniupnpc     1.9
 
 Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
 Build requirements:
 
-	sudo apt-get install build-essential libssl1.0-dev libzip-dev libboost-all-dev
+	sudo apt-get install build-essential libssl-dev libzip-dev libboost-all-dev
 
 Optional:
 
