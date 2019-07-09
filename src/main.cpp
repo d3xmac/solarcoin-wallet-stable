@@ -3503,9 +3503,11 @@ bool LoadExternalBlockFile(FILE* fileIn)
                     CBlock block;
                     blkdat >> block;
                     if (block.IsProofOfWork() && block.vtx[0].nTime > block.nTime)
+                    {
                         // If loading a legacy block from a legacy node, set the tx timestamps.
                         BOOST_FOREACH(CTransaction& tx, block.vtx)
                             tx.nTime = block.nTime;
+                    }
                     if (ProcessBlock(NULL,&block))
                     {
                         nLoaded++;
@@ -3685,7 +3687,9 @@ void static ProcessGetData(CNode* pfrom)
                     block.ReadFromDisk((*mi).second, true);
                     int nType = SER_NETWORK;
                     if (pfrom->nVersion <= PROTOCOL_VERSION_POW)
+                    {
                         nType |= SER_LEGACYPROTOCOL;
+                    }
                     CDataStream ss(nType, PROTOCOL_VERSION);
                     ss.reserve((nBestHeight >= FORK_HEIGHT_1 ? MAX_BLOCK_SIZE : MAX_BLOCK_SIZE_1M));
                     ss << block;
@@ -4546,7 +4550,7 @@ bool ProcessMessages(CNode* pfrom)
         CNetMessage& msg = *it;
 
         if (fDebug)
-            printf("ProcessMessages() : nVersion=%d nSendSize=%d msg.hdr.nMessageSize=%d strCommand=%s\n", pfrom->nVersion, pfrom->nSendSize, msg.hdr.nMessageSize, msg.hdr.GetCommand().c_str());
+            printf("ProcessMessages() : nVersion=%d nSendSize=%zu msg.hdr.nMessageSize=%d strCommand=%s\n", pfrom->nVersion, pfrom->nSendSize, msg.hdr.nMessageSize, msg.hdr.GetCommand().c_str());
 
         // end, if an incomplete message is found
         if (!msg.complete())
