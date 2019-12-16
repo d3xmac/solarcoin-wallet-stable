@@ -81,7 +81,7 @@ symbols, which reduces the executable size by about 90%.
 
 miniupnpc
 ---------
-	sudo apt-get install miniupnpc-dev
+	sudo apt-get install libminiupnpc-dev
 
 Or to build yourself:
 	tar -xzvf miniupnpc-1.6.tar.gz
