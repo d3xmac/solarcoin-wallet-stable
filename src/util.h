@@ -30,8 +30,9 @@
 #include "netbase.h" // for AddTimeData
 
 // to obtain PRId64 on some old systems
+#ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS 1
-
+#endif
 
 #include <stdint.h>
 #include <inttypes.h>
@@ -270,7 +271,7 @@ void runCommand(std::string strCommand);
 
 inline std::string i64tostr(int64_t n)
 {
-    return strprintf("%"PRId64, n);
+    return strprintf("%" PRId64 , n);
 }
 
 inline std::string itostr(int n)

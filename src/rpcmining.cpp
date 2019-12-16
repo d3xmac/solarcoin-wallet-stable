@@ -545,9 +545,11 @@ Value submitblock(const Array& params, bool fHelp)
     }
 
     if (block.IsProofOfWork() && block.vtx[0].nTime > block.nTime)
+    {
         // If creating a legacy block, set the tx timestamps.
         BOOST_FOREACH(CTransaction& tx, block.vtx)
             tx.nTime = block.nTime;
+    }
 
     bool fAccepted = ProcessBlock(NULL, &block);
     if (!fAccepted)
