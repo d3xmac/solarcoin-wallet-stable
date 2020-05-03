@@ -32,6 +32,17 @@ using namespace boost;
 using namespace boost::asio;
 using namespace json_spirit;
 
+// Boost 1.7 option (Ubuntu 20.04)
+#if BOOST_VERSION >= 107000
+    #define GetIOService(s) ((boost::asio::io_context&)(s).get_executor().context())
+    #define GetIOServiceFromPtr(s) ((boost::asio::io_context&)(s->get_executor().context()))
+    typedef boost::asio::io_context ioContext;
+#else
+    #define GetIOService(s) ((s).get_io_service())
+    #define GetIOServiceFromPtr(s) ((s)->get_io_service())
+    typedef boost::asio::io_service ioContext;
+#endif
+
 void ThreadRPCServer2(void* parg);
 
 static std::string strRPCUserColonPass;
@@ -613,7 +624,7 @@ public:
     }
     bool connect(const std::string& server, const std::string& port)
     {
-        ip::tcp::resolver resolver(stream.get_io_service());
+        ip::tcp::resolver resolver(GetIOService(stream));
         ip::tcp::resolver::query query(server.c_str(), port.c_str());
         ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
         ip::tcp::resolver::iterator end;
@@ -649,10 +660,10 @@ class AcceptedConnectionImpl : public AcceptedConnection
 {
 public:
     AcceptedConnectionImpl(
-            asio::io_service& io_service,
+            ioContext& io_context,
             ssl::context &context,
             bool fUseSSL) :
-        sslStream(io_service, context),
+        sslStream(io_context, context),
         _d(sslStream, fUseSSL),
         _stream(_d)
     {
@@ -719,7 +730,7 @@ static void RPCListen(boost::shared_ptr< basic_socket_acceptor<Protocol> > accep
                    const bool fUseSSL)
 {
     // Accept connection
-    AcceptedConnectionImpl<Protocol>* conn = new AcceptedConnectionImpl<Protocol>(acceptor->get_io_service(), context, fUseSSL);
+    AcceptedConnectionImpl<Protocol>* conn = new AcceptedConnectionImpl<Protocol>(GetIOServiceFromPtr(acceptor), context, fUseSSL);
 
     acceptor->async_accept(
             conn->sslStream.lowest_layer(),
@@ -809,7 +820,7 @@ void ThreadRPCServer2(void* parg)
 
     const bool fUseSSL = GetBoolArg("-rpcssl");
 
-    asio::io_service io_service;
+    ioContext io_context;
 
     ssl::context context(ssl::context::sslv23);
     if (fUseSSL)
@@ -835,7 +846,7 @@ void ThreadRPCServer2(void* parg)
     asio::ip::address bindAddress = loopback ? asio::ip::address_v6::loopback() : asio::ip::address_v6::any();
     ip::tcp::endpoint endpoint(bindAddress, GetArg("-rpcport", GetDefaultRPCPort()));
     boost::system::error_code v6_only_error;
-    boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(io_service));
+    boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(io_context));
 
     boost::signals2::signal<void ()> StopRequests;
 
@@ -872,7 +883,7 @@ void ThreadRPCServer2(void* parg)
             bindAddress = loopback ? asio::ip::address_v4::loopback() : asio::ip::address_v4::any();
             endpoint.address(bindAddress);
 
-            acceptor.reset(new ip::tcp::acceptor(io_service));
+            acceptor.reset(new ip::tcp::acceptor(io_context));
             acceptor->open(endpoint.protocol());
             acceptor->set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
             acceptor->bind(endpoint);
@@ -900,7 +911,7 @@ void ThreadRPCServer2(void* parg)
 
     vnThreadsRunning[THREAD_RPCLISTENER]--;
     while (!fShutdown)
-        io_service.run_one();
+        io_context.run_one();
     vnThreadsRunning[THREAD_RPCLISTENER]++;
     StopRequests();
 }
@@ -1121,10 +1132,10 @@ Object CallRPC(const string& strMethod, const Array& params)
 
     // Connect to localhost
     bool fUseSSL = GetBoolArg("-rpcssl");
-    asio::io_service io_service;
+    ioContext io_context;
     ssl::context context(ssl::context::sslv23);
     context.set_options(ssl::context::no_sslv2);
-    asio::ssl::stream<asio::ip::tcp::socket> sslStream(io_service, context);
+    asio::ssl::stream<asio::ip::tcp::socket> sslStream(io_context, context);
     SSLIOStreamDevice<asio::ip::tcp> d(sslStream, fUseSSL);
     iostreams::stream< SSLIOStreamDevice<asio::ip::tcp> > stream(d);
     if (!d.connect(GetArg("-rpcconnect", "127.0.0.1"), GetArg("-rpcport", itostr(GetDefaultRPCPort()))))
